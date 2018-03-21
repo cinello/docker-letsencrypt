@@ -1,20 +1,16 @@
-FROM nginx
+FROM nginx:stable
+
+COPY backports.list /etc/apt/sources.list.d/backports.list
 
 RUN apt-get update && apt-get install -y git wget cron bc
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
-RUN git clone https://github.com/certbot/certbot /letsencrypt/app
-WORKDIR /letsencrypt/app
-RUN ./letsencrypt-auto; exit 0
-
-# You should see "OK" if you go to http://<domain>/.well-known/acme-challenge/health
-
+RUN apt-get install certbot -y -t stretch-backports && apt-get autoclean && apt-get autoremove --purge
 RUN echo "OK" > /letsencrypt/challenges/.well-known/acme-challenge/health
 
 # Install kubectl
-RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.6.3/bin/linux/amd64/kubectl
-RUN chmod +x kubectl
-RUN mv kubectl /usr/local/bin/
+RUN wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`wget -q -O - https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl \
+    && chmod +x /usr/local/bin/kubectl
 
 # Add our nginx config for routing through to the challenge results
 RUN rm /etc/nginx/conf.d/*.conf

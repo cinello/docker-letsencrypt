@@ -1,3 +1,9 @@
+# 0.4.0
+
+ - Changed certificae update logic
+ - Upgrade certbot to 0.21.1
+ - Upgrade kubectl to latest (always)
+
 # 0.3.0
 
  - Upgrade kubectl to 1.6.3
