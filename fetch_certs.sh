@@ -21,11 +21,7 @@ DAYS=15
 TIME=$((60 * 60 * 24 * ${DAYS}))
 
 MUST_UPGRADE="n"
-if [ ! -f ${CERT_LOCATION}/${DOMAIN}/fullchain.pem ]; then
-    MUST_UPGRADE="y"
-fi
-
-if ! openssl x509 -noout -checkend ${TIME} -in ${CERT_LOCATION}/${DOMAIN}/fullchain.pem >/dev/null; then
+if [ ! -f ${CERT_LOCATION}/${DOMAIN}/fullchain.pem ] || [ ! openssl x509 -noout -checkend ${TIME} -in ${CERT_LOCATION}/${DOMAIN}/fullchain.pem >/dev/null ]; then
     MUST_UPGRADE="y"
 fi
 
@@ -38,7 +34,8 @@ if [ "${MUST_UPGRADE}" = "y" ]; then
     done
 
     certbot certonly \
-        --renew-by-default --agree-tos -m ${EMAIL} \
+        --renew-by-default --agree-tos --email ${EMAIL} \
+        --max-log-backups 0 \
         --webroot -w /letsencrypt/challenges/ \
         ${domain_args}
 
