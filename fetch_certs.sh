@@ -21,7 +21,7 @@ DAYS=15
 TIME=$((60 * 60 * 24 * ${DAYS}))
 
 MUST_UPGRADE="n"
-if [ ! -f ${CERT_LOCATION}/${DOMAIN}/fullchain.pem ] || [ ! openssl x509 -noout -checkend ${TIME} -in ${CERT_LOCATION}/${DOMAIN}/fullchain.pem >/dev/null ]; then
+if [ ! -f ${CERT_LOCATION}/${DOMAIN}/fullchain.pem ] || ! openssl x509 -noout -checkend ${TIME} -in ${CERT_LOCATION}/${DOMAIN}/fullchain.pem >/dev/null; then
     MUST_UPGRADE="y"
 fi
 
@@ -43,5 +43,5 @@ if [ "${MUST_UPGRADE}" = "y" ]; then
     exit 0
 fi
 
-"SKIPPED" > /tmp/.letsencrypt-status
+echo "SKIPPED" > /tmp/.letsencrypt-status
 exit 0
