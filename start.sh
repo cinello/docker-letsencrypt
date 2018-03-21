@@ -26,6 +26,9 @@ if [ -n "${LETSENCRYPT_ENDPOINT+1}" ]; then
     echo "server = ${LETSENCRYPT_ENDPOINT}" >> /etc/letsencrypt/cli.ini
 fi
 
+echo "Registering user..."
+certbot register --email ${EMAIL} --no-eff-email --agree-tos --max-log-backups 0 || true
+
 # Start cron
 echo "Starting cron..."
 cron &
