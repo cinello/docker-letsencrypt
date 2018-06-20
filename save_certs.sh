@@ -27,7 +27,7 @@ PEM=$(cat ${CERT_LOCATION}/${DOMAIN}/fullchain.pem ${CERT_LOCATION}/${DOMAIN}/pr
 DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
 
 NAMESPACE=${NAMESPACE:-default}
-TYPE=${TYPE:-Opaque}
+TYPE=${TYPE:-kubernetes.io/tls}
 
 kubectl get secrets --namespace ${NAMESPACE} ${SECRET_NAME} && ACTION=replace || ACTION=create;
 
