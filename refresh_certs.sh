@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-if [ -e "/tmp/.letsencrypt-lock" ]
-then
-    echo "Nope, not gonna touch that."
-    exit 1
+if [ -e "/tmp/.letsencrypt-lock" ]; then
+    OLDPID=$(cat /tmp/.letsencrypt-lock)
+    if ps -p $OLDPID > /dev/null; then
+        echo "Nope, not gonna touch that."
+        exit 1
+    fi
+    rm -f /tmp/.letsencrypt-lock
 fi
 
 touch /tmp/.letsencrypt-lock
+echo $BASHPID > /tmp/.letsencrypt-lock
 
 echo "$(date) Fetching certs..."
 /letsencrypt/fetch_certs.sh
@@ -16,7 +20,7 @@ if [ -f /tmp/.letsencrypt-status ]; then
   rm /tmp/.letsencrypt-status
 fi
 
-if [ "${UPDATED}" = "UPDATED" ];then
+if [ "${UPDATED}" = "UPDATED" ]; then
     echo "$(date) Saving certs..."
     /letsencrypt/save_certs.sh
 
