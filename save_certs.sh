@@ -33,20 +33,23 @@ kubectl get secrets --namespace ${NAMESPACE} ${SECRET_NAME} && ACTION=replace ||
 
 cat << EOF | kubectl ${ACTION} -f -
 {
- "apiVersion": "v1",
- "kind": "Secret",
- "metadata": {
-   "name": "${SECRET_NAME}",
-   "namespace": "${NAMESPACE}"
- },
- "data": {
-   "proxycert": "${CERT}",
-   "proxykey": "${KEY}",
-   "tls.crt": "${CERT}",
-   "tls.key": "${KEY}",
-   "tls.pem": "${PEM}",
-   "dhparam": "${DHPARAM}"
- },
- "type": "${TYPE}"
+  "apiVersion": "v1",
+  "kind": "Secret",
+  "metadata": {
+    "annotations": {
+      "kubernetes.io/tls-acme": "true"
+    },
+    "name": "${SECRET_NAME}",
+    "namespace": "${NAMESPACE}"
+  },
+  "data": {
+    "proxycert": "${CERT}",
+    "proxykey": "${KEY}",
+    "tls.crt": "${CERT}",
+    "tls.key": "${KEY}",
+    "tls.pem": "${PEM}",
+    "dhparam": "${DHPARAM}"
+  },
+  "type": "${TYPE}"
 }
 EOF
