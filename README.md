@@ -73,4 +73,4 @@ kubectl exec -it <pod> -- bash -c 'EMAIL=fred@fred.com DOMAINS=example.com foo.e
 - EMAIL_FROM
   - email used to populate the FROM header of the message
 - EMAIL_TO
-  - a list of recipients to send the mail to, separated by comma
+  - a list of addresses to send the mail to, separated by space

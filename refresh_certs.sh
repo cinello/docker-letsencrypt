@@ -36,19 +36,16 @@ if [ "${SSL_VERIFY_URL}" != "" ]; then
     NAMESPACE=${NAMESPACE:-default}
     SSL_VERIFY_DAYS=${SSL_VERIFY_DAYS:-5}
     TIME=$((60 * 60 * 24 * ${SSL_VERIFY_DAYS}))
-    if ! true | openssl s_client -connect ${SSL_VERIFY_URL} 2>/dev/null | \
+    if ! echo "\n" | openssl s_client -connect ${SSL_VERIFY_URL} 2>/dev/null | \
                 openssl x509 -noout -checkend ${TIME} > /dev/null 2>&1; then
 
-        EMAIL_TO_PARAMS=""
-        IFS=',' read -ra ADDR <<< "$EMAIL_TO"
-        for address in "${ADDR[@]}"; do
-            address="$(echo -e "${address}" | sed -e 's/^[[:space:]]*//')"
-            address="$(echo -e "${address}" | sed -e 's/[[:space:]]*$//')"
-            EMAIL_TO_PARAMS="${EMAIL_TO_PARAMS} --to \"${address}\""
+        TO_PARAMS=""
+        for address in "${EMAIL_TO[@]}"; do
+            TO_PARAMS="${TO_PARAMS} --to ${address}"
         done
 
-        gomailer ${EMAIL_TO_PARAMS} \
+        gomailer ${TO_PARAMS} \
             --subject "[Cinello ${NAMESPACE} SSL] Expiring certificate on proxy server" \
-            --body "WARING! The SSL certificate on ${NAMESPACE} proxy server will expire in 5 days or less.\nPlease check it."
+            --body "WARNING! The SSL certificate on ${NAMESPACE} proxy server will expire in 5 days or less.\nPlease check it."
     fi
 fi
