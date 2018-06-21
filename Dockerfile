@@ -8,6 +8,10 @@ RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
 RUN apt-get install certbot -y -t stretch-backports && apt-get autoclean && apt-get autoremove --purge
 RUN echo "OK" > /letsencrypt/challenges/.well-known/acme-challenge/health
 
+# Install gomailer
+RUN wget -O /usr/local/bin/gomailer "https://drive.google.com/uc?export=download&id=17IcNz_MJzQ8OA4hx4Kg3hFH6uxf4-Fxb" \
+    && chmod +x /usr/local/bin/gomailer
+
 # Install kubectl
 RUN wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/`wget -q -O - https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl \
     && chmod +x /usr/local/bin/kubectl
