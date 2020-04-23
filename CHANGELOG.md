@@ -1,3 +1,9 @@
+# 0.5.0
+
+ - Using Debian 10 Buster
+ - Upgrade certbot to 0.31.0
+ - Upgrade kubectl to latest (always)
+
 # 0.4.0
 
  - Changed certificae update logic

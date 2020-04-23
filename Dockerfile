@@ -5,7 +5,7 @@ COPY backports.list /etc/apt/sources.list.d/backports.list
 RUN apt-get update && apt-get install -y git wget cron bc
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
-RUN apt-get install certbot -y -t stretch-backports && apt-get autoclean && apt-get autoremove --purge
+RUN apt-get install certbot -y -t buster-backports && apt-get autoclean && apt-get autoremove --purge
 RUN echo "OK" > /letsencrypt/challenges/.well-known/acme-challenge/health
 
 # Install gomailer
